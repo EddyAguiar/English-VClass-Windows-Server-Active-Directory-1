@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="English VClass — IT Practice • Week 1, Day 1 • Windows Server & Active Directory">
+<title>IT English • Week 1 Day 1 • Windows Server & Active Directory</title>
+<style>
+:root{
+  --primary:#123c69;
+  --secondary:#1f7a8c;
+  --accent:#f4b942;
+  --light:#f4f7fb;
+  --dark:#17202a;
+  --muted:#667085;
+  --green:#16803c;
+  --green-bg:#eaf7ee;
+  --red:#c62828;
+  --red-bg:#fdecec;
+  --white:#fff;
+  --shadow:0 8px 24px rgba(18,60,105,.10);
+  --radius:18px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--light);
+  color:var(--dark);
+  line-height:1.6;
+}
+header{
+  background:linear-gradient(135deg,var(--primary),var(--secondary));
+  color:white;
+  padding:28px 16px 34px;
+}
+.header-inner{max-width:980px;margin:auto}
+.brand{font-weight:800;letter-spacing:.5px;font-size:1.05rem}
+header h1{font-size:clamp(1.8rem,5vw,3rem);line-height:1.15;margin:12px 0 8px}
+header p{margin:0;opacity:.95;font-size:1rem}
+.progress-wrap{margin-top:22px;background:rgba(255,255,255,.2);border-radius:99px;height:10px;overflow:hidden}
+.progress{width:10%;height:100%;background:var(--accent);border-radius:99px;transition:width .5s ease}
+nav{
+  position:sticky;top:0;z-index:20;
+  background:white;border-bottom:1px solid #e5e7eb;
+  overflow-x:auto;white-space:nowrap;
+}
+nav .nav-inner{max-width:980px;margin:auto;display:flex}
+nav a{
+  display:inline-block;padding:12px 14px;color:var(--primary);
+  text-decoration:none;font-weight:700;font-size:.9rem;
+}
+nav a.done::after{content:" ✓";color:var(--green);font-weight:800}
+main{max-width:980px;margin:auto;padding:20px 14px 50px}
+.card{
+  background:white;border-radius:var(--radius);padding:22px;
+  margin:18px 0;box-shadow:var(--shadow);
+}
+.card h2{color:var(--primary);margin-top:0;font-size:1.45rem}
+.card h3{color:var(--secondary);margin-bottom:8px}
+.badge{
+  display:inline-block;background:#e8f2fb;color:var(--primary);
+  padding:5px 10px;border-radius:999px;font-size:.8rem;font-weight:800;
+}
+.goal-list{padding-left:20px}
+.goal-list li{margin:7px 0}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:420px}
+th,td{padding:12px;border-bottom:1px solid #e8ebef;text-align:left}
+th{background:#eef4fa;color:var(--primary)}
+.example{
+  background:#f8fafc;border-left:5px solid var(--secondary);
+  padding:13px 15px;margin:12px 0;border-radius:8px;
+}
+.example-audio{
+  display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;
+}
+.audio-btn{
+  background:#eaf0f6;border:1px solid #d0d9e6;
+  border-radius:30px;padding:4px 12px;font-size:.75rem;
+  font-weight:700;color:var(--primary);cursor:pointer;
+  display:inline-flex;align-items:center;gap:4px;transition:.15s;
+}
+.audio-btn:hover{background:#d0d9e6}
+.audio-btn.playing{background:var(--secondary);color:white;border-color:var(--secondary)}
+.en{font-weight:700;color:var(--primary)}
+.pt{color:var(--muted)}
+.tip{
+  background:#fff8e7;border-left:5px solid var(--accent);
+  padding:14px;border-radius:8px;margin-top:14px;
+}
+.exercise{
+  border:1px solid #e3e8ef;border-radius:14px;padding:16px;margin:14px 0;
+}
+input[type="text"],textarea,select{
+  width:100%;padding:12px;border:1px solid #ccd5df;border-radius:10px;
+  font:inherit;background:white;
+}
+textarea{min-height:110px;resize:vertical}
+button{
+  border:0;border-radius:12px;padding:12px 17px;
+  background:var(--primary);color:white;font-weight:800;
+  cursor:pointer;font-size:1rem;
+}
+button:hover{filter:brightness(1.08)}
+button.secondary{background:var(--secondary)}
+button.light{background:#eaf0f6;color:var(--primary)}
+.feedback{
+  margin-top:10px;padding:11px;border-radius:10px;font-weight:700;display:none;
+}
+.feedback.correct{display:block;background:var(--green-bg);color:var(--green)}
+.feedback.wrong{display:block;background:var(--red-bg);color:var(--red)}
+.option{
+  display:block;width:100%;text-align:left;margin:8px 0;
+  background:#f5f7fa;color:var(--dark);border:1px solid #dce2e9;
+}
+.option.correct{background:var(--green-bg);border-color:#9ed7ae;color:var(--green)}
+.option.wrong{background:var(--red-bg);border-color:#efaaaa;color:var(--red)}
+.option:disabled{cursor:default;opacity:1}
+.score{
+  text-align:center;background:#eef4fa;border-radius:16px;padding:20px;
+  margin-top:20px;
+}
+.score strong{font-size:2.2rem;color:var(--primary)}
+.audio-box{
+  text-align:center;background:#f5f8fb;border-radius:15px;padding:20px;
+}
+#transcript{display:none;margin-top:15px}
+.speaking-card{
+  background:linear-gradient(135deg,#f5f8fb,#ffffff);
+  border:1px solid #e0e7ef;
+}
+footer{
+  text-align:center;margin-top:30px;padding:28px 15px;
+  color:#777;background:white;border-top:1px solid #e5e7eb;
+}
+footer .copyright{font-weight:700}
+.small{font-size:.88rem;color:var(--muted)}
+.hidden{display:none}
+
+/* Concept cards */
+.concept-card{
+  border:1px solid #e3e8ef;
+  border-radius:16px;
+  padding:18px;
+  margin:16px 0;
+  background:linear-gradient(135deg,#f8fafc,#ffffff);
+}
+.concept-header{
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:8px;margin-bottom:10px;
+}
+.concept-title{font-weight:800;color:var(--primary);font-size:1.05rem;}
+.concept-level{
+  background:#e8f2fb;color:var(--primary);
+  padding:3px 10px;border-radius:999px;
+  font-size:.72rem;font-weight:800;letter-spacing:.5px;
+}
+.concept-question{
+  font-weight:700;color:var(--dark);margin:8px 0;
+}
+.concept-answer{
+  background:#f0f9ff;border-left:4px solid var(--primary);
+  padding:12px 14px;border-radius:8px;margin:10px 0;
+  color:#0c4a6e;
+}
+.concept-pt{color:var(--muted);font-size:.92rem;margin:6px 0;}
+.concept-example{
+  background:#f8fafc;border-radius:8px;padding:10px 12px;
+  margin:8px 0;font-size:.92rem;
+}
+.concept-example strong{color:var(--primary);}
+.vocab-audio{
+  display:inline-flex;align-items:center;gap:4px;
+  background:#eaf0f6;border:1px solid #d0d9e6;
+  border-radius:20px;padding:3px 10px;margin:3px 4px 3px 0;
+  font-size:.78rem;font-weight:600;color:var(--primary);cursor:pointer;
+}
+.vocab-audio:hover{background:#d0d9e6;}
+
+@media(max-width:600px){
+  header{padding-top:23px}
+  .card{padding:18px;margin:14px 0}
+  nav a{padding:11px 12px;font-size:.82rem}
+  button{width:100%;margin-top:5px}
+  .audio-btn{width:auto;margin-top:0}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">English VClass • Edson D'Aguiar</div>
+    <h1>Week 1 • Day 1 — Windows Server & Active Directory</h1>
+    <p>Domain vs Local Accounts · OUs · Security Groups · Onboarding & Offboarding · Access Denied Troubleshooting</p>
+    <div class="progress-wrap" aria-label="Progresso da aula"><div class="progress" id="globalProgress"></div></div>
+    <p class="small" style="color:white;margin-top:8px"><span id="progressLabel">0</span>% concluído • 20-Day IT Study Plan • Modern Identity & Endpoint Management</p>
+  </div>
+</header>
+
+<nav aria-label="Navegação da aula">
+  <div class="nav-inner">
+    <a href="#objetivos" data-section="objetivos">Objetivos</a>
+    <a href="#concepts" data-section="concepts">Concepts</a>
+    <a href="#objects" data-section="objects">AD Objects</a>
+    <a href="#tools" data-section="tools">Tools</a>
+    <a href="#expressions" data-section="expressions">Expressions</a>
+    <a href="#examples" data-section="examples">Examples</a>
+    <a href="#exercises" data-section="exercises">Exercises</a>
+    <a href="#listening" data-section="listening">Listening</a>
+    <a href="#speaking" data-section="speaking">Speaking</a>
+    <a href="#quiz" data-section="quiz">Quiz</a>
+  </div>
+</nav>
+
+<main>
+
+<section class="card" id="objetivos">
+  <span class="badge">WEEK 1 • DAY 1 • IT SUPPORT</span>
+  <h2>🎯 Objetivos da aula</h2>
+  <p>Esta aula cobre o <strong>Day 1</strong> do plano de 20 dias: <strong>Windows Server & Active Directory (AD)</strong>. Ao final, você deverá ser capaz de:</p>
+  <ul class="goal-list">
+    <li>Explicar a diferença entre <strong>local account</strong> e <strong>domain account</strong>.</li>
+    <li>Descrever o papel do <strong>Domain Controller</strong> e do <strong>Active Directory</strong>.</li>
+    <li>Organizar objetos com <strong>OUs</strong> e conceder permissões com <strong>Security Groups</strong>.</li>
+    <li>Executar o fluxo de <strong>onboarding</strong> (criar usuário, OU, grupos) e <strong>offboarding</strong> (disable, reset, move, delete later).</li>
+    <li>Diagnosticar <strong>Access Denied</strong>: token, grupo, Share + NTFS e Deny explícito.</li>
+    <li>Explicar tudo isso <strong>em inglês</strong> em entrevistas e escrever <strong>notas claras de ticket</strong>.</li>
+    <li>Melhorar a <strong>compreensão auditiva</strong> com um texto de helpdesk.</li>
+    <li>Praticar a <strong>produção oral</strong> com perguntas de entrevista técnica.</li>
+  </ul>
+</section>
+
+<section class="card" id="concepts">
+  <h2>📘 1. Core Concepts — Identity in a Domain</h2>
+  <p>Quatro ideias sustentam o Day 1. Responda cada pergunta e veja a explicação.</p>
+  <div class="concept-card">
+    <div class="concept-header"><span class="concept-title">🏢 Local vs Domain Account</span><span class="concept-level">A2–B1</span></div>
+    <div class="concept-question">❓ Where does a domain account live?</div>
+    <div class="exercise" id="c1">
+      <button class="option" onclick="answerConcept(this, true, 'c1')">In a central database on a Domain Controller</button>
+      <button class="option" onclick="answerConcept(this, false, 'c1')">On each laptop only</button>
+      <button class="option" onclick="answerConcept(this, false, 'c1')">In the user's browser</button>
+      <div class="feedback"></div>
+    </div>
+    <div class="concept-answer">✅ Uma <strong>local account</strong> existe em <strong>uma única máquina</strong>. Uma <strong>domain account</strong> vive no banco central do <strong>Domain Controller (DC)</strong> e funciona em todos os PCs ingressados no domínio.</div>
+    <div class="concept-example"><strong>Example:</strong> <em>A local account exists on one machine. A domain account is stored on the Domain Controller and works on every domain-joined PC.</em></div>
+    <div class="example-audio"><button class="audio-btn" data-phrase="A local account exists on one machine. A domain account is stored on the Domain Controller and works on every domain-joined PC." data-accent="us">🇺🇸 US</button><button class="audio-btn" data-phrase="A local account exists on one machine. A domain account is stored on the Domain Controller and works on every domain-joined PC." data-accent="uk">🇬🇧 UK</button></div>
+    <div class="rq-vocab" style="margin-top:12px;padding-top:10px;border-top:1px dashed #d0d9e6;font-size:.88rem;color:var(--muted);">
+      <strong style="color:var(--primary);">📚 Key Vocabulary:</strong>
+      <span class="vocab-audio" data-phrase="local account" data-accent="us">🔊 local account → conta local</span>
+      <span class="vocab-audio" data-phrase="domain account" data-accent="us">🔊 domain account → conta de domínio</span>
+      <span class="vocab-audio" data-phrase="Domain Controller" data-accent="us">🔊 Domain Controller → controlador de domínio</span>
+      </div>
+  </div>
+  <div class="concept-card">
+    <div class="concept-header"><span class="concept-title">📁 Organizational Unit (OU)</span><span class="concept-level">A2–B1</span></div>
+    <div class="concept-question">❓ What is an OU used for?</div>
+    <div class="exercise" id="c2">
+      <button class="option" onclick="answerConcept(this, true, 'c2')">To organize objects and apply policies (GPOs)</button>
+      <button class="option" onclick="answerConcept(this, false, 'c2')">To grant folder permissions</button>
+      <button class="option" onclick="answerConcept(this, false, 'c2')">To store passwords</button>
+      <div class="feedback"></div>
+    </div>
+    <div class="concept-answer">✅ Uma <strong>OU</strong> é como uma pasta que organiza usuários e computadores — e, amanhã (Day 2), é onde você aplica <strong>GPOs</strong>. Permissões <strong>não</strong> ficam na OU.</div>
+    <div class="concept-example"><strong>Example:</strong> <em>Carla is in the Finance OU, so she receives the Finance policies automatically.</em></div>
+    <div class="example-audio"><button class="audio-btn" data-phrase="Carla is in the Finance OU, so she receives the Finance policies automatically." data-accent="us">🇺🇸 US</button><button class="audio-btn" data-phrase="Carla is in the Finance OU, so she receives the Finance policies automatically." data-accent="uk">🇬🇧 UK</button></div>
+    <div class="rq-vocab" style="margin-top:12px;padding-top:10px;border-top:1px dashed #d0d9e6;font-size:.88rem;color:var(--muted);">
+      <strong style="color:var(--primary);">📚 Key Vocabulary:</strong>
+      <span class="vocab-audio" data-phrase="Organizational Unit" data-accent="us">🔊 Organizational Unit → unidade organizacional</span>
+      <span class="vocab-audio" data-phrase="object" data-accent="us">🔊 object → objeto</span>
+      <span class="vocab-audio" data-phrase="policy" data-accent="us">🔊 policy → política</span>
+      </div>
+  </div>
+  <div class="concept-card">
+    <div class="concept-header"><span class="concept-title">🔐 Security Group</span><span class="concept-level">B1</span></div>
+    <div class="concept-question">❓ Where should permissions live?</div>
+    <div class="exercise" id="c3">
+      <button class="option" onclick="answerConcept(this, true, 'c3')">On security groups</button>
+      <button class="option" onclick="answerConcept(this, false, 'c3')">On each individual user</button>
+      <button class="option" onclick="answerConcept(this, false, 'c3')">On the OU</button>
+      <div class="feedback"></div>
+    </div>
+    <div class="concept-answer">✅ Conceda a permissão ao <strong>grupo</strong> e depois adicione ou remova pessoas dele. Assim você não edita a permissão da pasta para cada usuário.</div>
+    <div class="concept-example"><strong>Example:</strong> <em>I add Carla to SG-Finance-Share-Read because the group already has read permission on the folder.</em></div>
+    <div class="example-audio"><button class="audio-btn" data-phrase="I add Carla to SG-Finance-Share-Read because the group already has read permission on the folder." data-accent="us">🇺🇸 US</button><button class="audio-btn" data-phrase="I add Carla to SG-Finance-Share-Read because the group already has read permission on the folder." data-accent="uk">🇬🇧 UK</button></div>
+    <div class="rq-vocab" style="margin-top:12px;padding-top:10px;border-top:1px dashed #d0d9e6;font-size:.88rem;color:var(--muted);">
+      <strong style="color:var(--primary);">📚 Key Vocabulary:</strong>
+      <span class="vocab-audio" data-phrase="security group" data-accent="us">🔊 security group → grupo de segurança</span>
+      <span class="vocab-audio" data-phrase="permission" data-accent="us">🔊 permission → permissão</span>
+      <span class="vocab-audio" data-phrase="membership" data-accent="us">🔊 membership → associação / participação</span>
+      </div>
+  </div>
+  <div class="concept-card">
+    <div class="concept-header"><span class="concept-title">🎫 Login Token</span><span class="concept-level">B1–B2</span></div>
+    <div class="concept-question">❓ Carla was added to a group while she was logged in, but still gets Access Denied. Why?</div>
+    <div class="exercise" id="c4">
+      <button class="option" onclick="answerConcept(this, true, 'c4')">Her token does not include the new group until she signs in again</button>
+      <button class="option" onclick="answerConcept(this, false, 'c4')">The server is broken</button>
+      <button class="option" onclick="answerConcept(this, false, 'c4')">Her password expired</button>
+      <div class="feedback"></div>
+    </div>
+    <div class="concept-answer">✅ As associações de grupo são gravadas no <strong>token</strong> no momento do login. Depois de mudar o grupo, o usuário precisa fazer <strong>sign out / sign in</strong> (ou reiniciar).</div>
+    <div class="concept-example"><strong>Example:</strong> <em>Please sign out and sign back in so your token refreshes.</em></div>
+    <div class="example-audio"><button class="audio-btn" data-phrase="Please sign out and sign back in so your token refreshes." data-accent="us">🇺🇸 US</button><button class="audio-btn" data-phrase="Please sign out and sign back in so your token refreshes." data-accent="uk">🇬🇧 UK</button></div>
+    <div class="rq-vocab" style="margin-top:12px;padding-top:10px;border-top:1px dashed #d0d9e6;font-size:.88rem;color:var(--muted);">
+      <strong style="color:var(--primary);">📚 Key Vocabulary:</strong>
+      <span class="vocab-audio" data-phrase="token" data-accent="us">🔊 token → token de acesso</span>
+      <span class="vocab-audio" data-phrase="sign out" data-accent="us">🔊 sign out → encerrar sessão</span>
+      <span class="vocab-audio" data-phrase="sign back in" data-accent="us">🔊 sign back in → entrar novamente</span>
+      </div>
+  </div>
+</section>
+
+<section class="card" id="objects">
+  <h2>🧩 2. AD Objects — What Lives in the Directory</h2>
+  <p>Estes são os objetos principais que você vai manipular todos os dias no suporte.</p>
+<div class="table-wrap"><table><thead><tr><th>Object</th><th>Purpose</th><th>Example</th><th>Áudio</th></tr></thead><tbody>
+<tr><td><strong>User</strong></td><td>identity of a person</td><td>carla.silva is a user in the Finance OU.</td><td><div class="example-audio"><button class="audio-btn" data-phrase="Carla dot silva is a user in the Finance OU." data-accent="us">🇺🇸 US</button><button class="audio-btn" data-phrase="Carla dot silva is a user in the Finance OU." data-accent="uk">🇬🇧 UK</button></div></td></tr>
+<tr><td><strong>Computer</strong></td><td>a domain-joined machine</td><td>FIN-LAPTOP-014 is a computer object.</td><td><div class="example-audio"><button class="audio-btn" data-phrase="FIN-LAPTOP-014 is a computer object." data-accent="us">🇺🇸 US</button><button class="audio-btn" data-phrase="FIN-LAPTOP-014 is a computer object." data-accent="uk">🇬🇧 UK</button></div></td></tr>
+<tr><td><strong>OU</strong></td><td>container for organizing and policies</td><td>The Finance OU contains all finance users.</td><td><div class="example-audio"><button class="audio-btn" data-phrase="The Finance OU contains all finance users." data-accent="us">🇺🇸 US</button><button class="audio-btn" data-phrase="The Finance OU contains all finance users." data-accent="uk">🇬🇧 UK</button></div></td></tr>
+<tr><td><strong>Security Group</strong></td><td>holds permissions</td><td>SG-Finance-Share-Read gives read access.</td><td><div class="example-audio"><button class="audio-btn" data-phrase="SG-Finance-Share-Read gives read access." data-accent="us">🇺🇸 US</button><button class="audio-btn" data-phrase="SG-Finance-Share-Read gives read access." data-accent="uk">🇬🇧 UK</button></div></td></tr>
+<tr><td><strong>Domain Controller</strong></td><td>server that authenticates users</td><td>The Domain Controller checks the password.</td><td><div class="example-audio"><button class="audio-btn" data-phrase="The Domain Controller checks the password." data-accent="us">🇺🇸 US</button><button class="audio-btn" data-phrase="The Domain Controller checks the password." data-accent="uk">🇬🇧 UK</button></div></td></tr>
+<tr><td><strong>Domain</strong></td><td>the boundary of the directory</td><td>The domain is company.local.</td><td><div class="example-audio"><button class="audio-btn" data-phrase="The domain is company dot local." data-accent="us">🇺🇸 US</button><button class="audio-btn" data-phrase="The domain is company dot local." data-accent="uk">🇬🇧 UK</button></div></td></tr>
+</tbody></table></div>
+  <div class="tip"><strong>💡 Dica:</strong> <strong>OU = organização + políticas.</strong> <strong>Security Group = permissões.</strong> Misturar os dois é o erro mais comum de iniciantes.</div>
+</section>
+
+<section class="card" id="tools">
+  <h2>🛠️ 3. Tools & Commands — Your Daily Toolkit</h2>
+  <p>Ferramentas e comandos que aparecem em quase todo ticket de identidade e acesso.</p>
+<div class="table-wrap"><table><thead><tr><th>Tool / Command</th><th>Use</th><th>Example</th><th>Áudio</th></tr></thead><tbody>
+<tr><td><strong>ADUC (dsa.msc)</strong></td><td>create and manage users, groups and OUs</td><td>Open ADUC to reset a password.</td><td><div class="example-audio"><button class="audio-btn" data-phrase="Open ADUC to reset a password." data-accent="us">🇺🇸 US</button><button class="audio-btn" data-phrase="Open ADUC to reset a password." data-accent="uk">🇬🇧 UK</button></div></td></tr>
+<tr><td><strong>RSAT</strong></td><td>admin tools on a workstation</td><td>Install RSAT to manage AD from your PC.</td><td><div class="example-audio"><button class="audio-btn" data-phrase="Install RSAT to manage AD from your PC." data-accent="us">🇺🇸 US</button><button class="audio-btn" data-phrase="Install RSAT to manage AD from your PC." data-accent="uk">🇬🇧 UK</button></div></td></tr>
+<tr><td><strong>whoami /groups</strong></td><td>shows the groups in the current token</td><td>Run whoami slash groups to check the token.</td><td><div class="example-audio"><button class="audio-btn" data-phrase="Run whoami slash groups to check the token." data-accent="us">🇺🇸 US</button><button class="audio-btn" data-phrase="Run whoami slash groups to check the token." data-accent="uk">🇬🇧 UK</button></div></td></tr>
+<tr><td><strong>Effective Access</strong></td><td>simulates a user's real folder permissions</td><td>Use Effective Access to test Carla's permissions.</td><td><div class="example-audio"><button class="audio-btn" data-phrase="Use Effective Access to test Carla&#x27;s permissions." data-accent="us">🇺🇸 US</button><button class="audio-btn" data-phrase="Use Effective Access to test Carla&#x27;s permissions." data-accent="uk">🇬🇧 UK</button></div></td></tr>
+<tr><td><strong>Disable account</strong></td><td>blocks login without deleting</td><td>Disable the account first, delete it later.</td><td><div class="example-audio"><button class="audio-btn" data-phrase="Disable the account first, delete it later." data-accent="us">🇺🇸 US</button><button class="audio-btn" data-phrase="Disable the account first, delete it later." data-accent="uk">🇬🇧 UK</button></div></td></tr>
+<tr><td><strong>Share + NTFS</strong></td><td>both layers apply; the most restrictive wins</td><td>Share and NTFS permissions both apply.</td><td><div class="example-audio"><button class="audio-btn" data-phrase="Share and NTFS permissions both apply." data-accent="us">🇺🇸 US</button><button class="audio-btn" data-phrase="Share and NTFS permissions both apply." data-accent="uk">🇬🇧 UK</button></div></td></tr>
+</tbody></table></div>
+  <div class="tip"><strong>💡 Dica:</strong> Um <strong>explicit Deny</strong> sempre vence qualquer <strong>Allow</strong>. Se tudo parece certo e o acesso falha, procure um Deny.</div>
+</section>
+
+<section class="card" id="expressions">
+  <h2>💬 4. Useful Expressions — Describe & Document</h2>
+  <p>Frases prontas para reportar um problema e escrever notas de ticket claras (Symptom + Cause + Action).</p>
+
+  <div class="concept-card">
+    <div class="concept-header"><span class="concept-title">🚨 Describing the Symptom</span><span class="concept-level">A2–B1</span></div>
+    <div class="concept-answer">
+      <strong>Access:</strong> She gets Access Denied. · He can't open the folder.<br>
+      <strong>Login:</strong> The user can't log in. · The account is locked out.<br>
+      <strong>Password:</strong> The password has expired. · The password must be reset.
+    </div>
+    <div class="example-audio"><button class="audio-btn" data-phrase="She gets Access Denied. He can&#x27;t open the folder. The user can&#x27;t log in. The account is locked out. The password has expired." data-accent="us">🇺🇸 US</button><button class="audio-btn" data-phrase="She gets Access Denied. He can&#x27;t open the folder. The user can&#x27;t log in. The account is locked out. The password has expired." data-accent="uk">🇬🇧 UK</button></div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header"><span class="concept-title">📎 Cause, Action & Result</span><span class="concept-level">B1–B2</span></div>
+    <div class="concept-answer">
+      <strong>Cause:</strong> The root cause is... · It happens because... · Her token was outdated.<br>
+      <strong>Action:</strong> I reset the password. · I added her to the group. · I asked her to sign out and back in.<br>
+      <strong>Result:</strong> As a result, she can access the folder. · The issue is resolved.<br>
+      <strong>Follow-up:</strong> Please confirm if it works. · I'll monitor the ticket.
+    </div>
+    <div class="example-audio"><button class="audio-btn" data-phrase="The root cause is an outdated token. I asked her to sign out and back in. As a result, she can access the folder. Please confirm if it works." data-accent="us">🇺🇸 US</button><button class="audio-btn" data-phrase="The root cause is an outdated token. I asked her to sign out and back in. As a result, she can access the folder. Please confirm if it works." data-accent="uk">🇬🇧 UK</button></div>
+  </div>
+
+  <div class="tip"><strong>💡 Fórmula da nota de ticket:</strong><br><strong>Symptom</strong> (what the user sees) + <strong>Cause</strong> (why it happened) + <strong>Action</strong> (what you did) + <strong>Result</strong> (current status).</div>
+</section>
+
+<section class="card" id="examples">
+  <h2>📝 5. Model Answers — Interview Questions</h2>
+  <p>Respostas completas para perguntas comuns de entrevista de suporte de TI.</p>
+  <div class="example">
+    <div class="en">Q: What is Active Directory and why do companies use it?</div>
+    <div><strong>Answer:</strong> <em>Active Directory is a central directory that stores users, computers and groups. Companies use it <strong>because</strong> IT can manage identity and access from one place. <strong>In addition</strong>, it saves time <strong>since</strong> nobody has to configure each computer separately.</em></div>
+    <div class="example-audio"><button class="audio-btn" data-phrase="Active Directory is a central directory that stores users, computers and groups. Companies use it because IT can manage identity and access from one place. In addition, it saves time since nobody has to configure each computer separately." data-accent="us">🇺🇸 US</button><button class="audio-btn" data-phrase="Active Directory is a central directory that stores users, computers and groups. Companies use it because IT can manage identity and access from one place. In addition, it saves time since nobody has to configure each computer separately." data-accent="uk">🇬🇧 UK</button></div>
+  </div>
+  <div class="example">
+    <div class="en">Q: How do you onboard a new employee?</div>
+    <div><strong>Answer:</strong> <em><strong>First</strong>, I create the user with a temporary password and force a change at the next logon. <strong>Then</strong> I place the user in the correct OU <strong>and</strong> add them to the right security groups.</em></div>
+    <div class="example-audio"><button class="audio-btn" data-phrase="First, I create the user with a temporary password and force a change at the next logon. Then I place the user in the correct OU and add them to the right security groups." data-accent="us">🇺🇸 US</button><button class="audio-btn" data-phrase="First, I create the user with a temporary password and force a change at the next logon. Then I place the user in the correct OU and add them to the right security groups." data-accent="uk">🇬🇧 UK</button></div>
+  </div>
+  <div class="example">
+    <div class="en">Q: How do you offboard an employee?</div>
+    <div><strong>Answer:</strong> <em>I disable the account, reset the password and move it to a Disabled Users OU. I don't delete it immediately <strong>because</strong> the audit trail and mailbox may still be needed. <strong>Finally</strong>, I delete it after the retention period.</em></div>
+    <div class="example-audio"><button class="audio-btn" data-phrase="I disable the account, reset the password and move it to a Disabled Users OU. I don&#x27;t delete it immediately because the audit trail and mailbox may still be needed. Finally, I delete it after the retention period." data-accent="us">🇺🇸 US</button><button class="audio-btn" data-phrase="I disable the account, reset the password and move it to a Disabled Users OU. I don&#x27;t delete it immediately because the audit trail and mailbox may still be needed. Finally, I delete it after the retention period." data-accent="uk">🇬🇧 UK</button></div>
+  </div>
+  <div class="example">
+    <div class="en">Q: A user says "Access Denied" on a shared folder. What do you check?</div>
+    <div><strong>Answer:</strong> <em><strong>First</strong>, I ask the user to sign out and back in to refresh the token. <strong>Then</strong> I verify the group membership and the Share and NTFS permissions. <strong>Finally</strong>, I look for an explicit Deny entry.</em></div>
+    <div class="example-audio"><button class="audio-btn" data-phrase="First, I ask the user to sign out and back in to refresh the token. Then I verify the group membership and the Share and NTFS permissions. Finally, I look for an explicit Deny entry." data-accent="us">🇺🇸 US</button><button class="audio-btn" data-phrase="First, I ask the user to sign out and back in to refresh the token. Then I verify the group membership and the Share and NTFS permissions. Finally, I look for an explicit Deny entry." data-accent="uk">🇬🇧 UK</button></div>
+  </div>
+</section>
+
+<section class="card" id="exercises">
+  <h2>✏️ 6. Exercises</h2>
+
+  <div class="exercise">
+    <h3>Exercise 1 — Where Do Permissions Live?</h3>
+    <p>You want to give Finance read access to a shared folder. Where do you grant the permission?</p>
+    <select id="ex1"><option value="">Choose an answer</option><option>A security group</option><option>Each individual user</option><option>The OU</option></select>
+    <button class="secondary" onclick="checkSel(1)">Check answer</button>
+    <div id="ex1fb" class="feedback"></div>
+  </div>
+  <div class="exercise">
+    <h3>Exercise 2 — First Troubleshooting Step</h3>
+    <p>A user was added to a group while logged in and still gets Access Denied. What is the first step?</p>
+    <select id="ex2"><option value="">Choose an answer</option><option>Ask the user to sign out and back in</option><option>Reinstall Windows</option><option>Delete the account</option></select>
+    <button class="secondary" onclick="checkSel(2)">Check answer</button>
+    <div id="ex2fb" class="feedback"></div>
+  </div>
+  <div class="exercise">
+    <h3>Exercise 3 — Choose the Command</h3>
+    <p>Which command shows the groups in the current login token?</p>
+    <select id="ex3"><option value="">Choose an answer</option><option>whoami /groups</option><option>ipconfig /all</option><option>ping</option></select>
+    <button class="secondary" onclick="checkSel(3)">Check answer</button>
+    <div id="ex3fb" class="feedback"></div>
+  </div>
+  <div class="exercise">
+    <h3>Exercise 4 — Offboarding</h3>
+    <p>"When an employee leaves, ____ the account first."</p>
+    <select id="ex4"><option value="">Choose an answer</option><option>disable</option><option>delete</option><option>rename</option></select>
+    <button class="secondary" onclick="checkSel(4)">Check answer</button>
+    <div id="ex4fb" class="feedback"></div>
+  </div>
+  <div class="exercise">
+    <h3>Exercise 5 — Share + NTFS</h3>
+    <p>Share and NTFS permissions both apply. Which result do you get?</p>
+    <select id="ex5"><option value="">Choose an answer</option><option>The most restrictive one</option><option>The most permissive one</option><option>Always the NTFS one</option></select>
+    <button class="secondary" onclick="checkSel(5)">Check answer</button>
+    <div id="ex5fb" class="feedback"></div>
+  </div>
+  <div class="exercise">
+    <h3>Exercise 6 — Translation</h3>
+    <p>"Eu desativo a conta primeiro e a excluo depois."</p>
+    <input id="ex6" type="text" placeholder="Type the English sentence">
+    <button class="secondary" onclick="checkEx6()">Check answer</button>
+    <div id="ex6fb" class="feedback"></div>
+  </div>
+</section>
+
+<section class="card" id="listening">
+  <h2>🎧 7. Listening Practice — A Day at the Helpdesk with Alex</h2>
+  <p>Ouça o texto e responda às perguntas. Alex usa <strong>Symptom + Cause + Action</strong> com linking words em um contexto real de suporte.</p>
+
+  <div class="audio-box">
+    <button onclick="speakListening()">🔊 Play Listening</button>
+    <button class="light" onclick="toggleTranscript()">📄 Show / Hide Transcript</button>
+    <div id="transcript" class="example">
+      <div class="en">
+        Hi, my name is Alex and I work as an IT support specialist. Today a new employee called Carla starts in Finance.
+        <strong>First</strong>, I create her user account in Active Directory with a temporary password, <strong>so</strong> she must change it at her first logon.
+        <strong>Then</strong> I place the account in the Finance OU <strong>because</strong> the OU organizes users and applies policies.
+        <strong>Next</strong>, I add her to the security group SG-Finance-Share-Read, <strong>since</strong> permissions should live on groups, not on individual users.
+        In the afternoon, Carla says she gets Access Denied on the Finance folder. <strong>However</strong>, I know she was already logged in when I added her to the group.
+        <strong>Therefore</strong>, I ask her to sign out and sign back in. <strong>After that</strong>, I run whoami /groups to check her token.
+        <strong>Although</strong> the group is now there, the problem continues, so I check the Share and NTFS permissions.
+        <strong>Finally</strong>, I find an explicit Deny entry and remove it. <strong>As a result</strong>, Carla can open the folder.
+        <strong>In addition</strong>, I write a clear note in the ticket with the cause and the solution.
+      </div>
+      <div class="pt">
+        Olá, meu nome é Alex e trabalho como especialista em suporte de TI. Hoje uma nova funcionária chamada Carla começa em Finance.
+        <strong>Primeiro</strong>, crio a conta de usuário dela no Active Directory com uma senha temporária, <strong>então</strong> ela precisa trocá-la no primeiro logon.
+        <strong>Depois</strong> coloco a conta na OU Finance <strong>porque</strong> a OU organiza usuários e aplica políticas.
+        <strong>Em seguida</strong>, adiciono-a ao grupo de segurança SG-Finance-Share-Read, <strong>já que</strong> as permissões devem ficar nos grupos, não nos usuários individuais.
+        À tarde, Carla diz que recebe Access Denied na pasta Finance. <strong>No entanto</strong>, sei que ela já estava logada quando a adicionei ao grupo.
+        <strong>Portanto</strong>, peço que ela saia e entre novamente. <strong>Depois disso</strong>, executo whoami /groups para verificar o token dela.
+        <strong>Embora</strong> o grupo agora esteja lá, o problema continua, então verifico as permissões de Share e NTFS.
+        <strong>Finalmente</strong>, encontro uma entrada de Deny explícito e a removo. <strong>Como resultado</strong>, Carla consegue abrir a pasta.
+        <strong>Além disso</strong>, escrevo uma nota clara no ticket com a causa e a solução.
+      </div>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <h3>Listening Questions</h3>
+    <p><strong>1.</strong> What is Alex's job?</p>
+    <select id="l1"><option value="">Choose</option><option>IT support specialist</option><option>Software developer</option><option>Network engineer</option></select>
+
+    <p><strong>2.</strong> Where does Alex place Carla's account?</p>
+    <select id="l2"><option value="">Choose</option><option>In the Disabled OU</option><option>In the Finance OU</option><option>In the IT OU</option></select>
+
+    <p><strong>3.</strong> Why must Carla change her password at first logon?</p>
+    <select id="l3"><option value="">Choose</option><option>Because she forgot it</option><option>Because it expired</option><option>Because it is a temporary password</option></select>
+
+    <p><strong>4.</strong> According to Alex, where should permissions live?</p>
+    <select id="l4"><option value="">Choose</option><option>On individual users</option><option>On security groups</option><option>On laptops</option></select>
+
+    <p><strong>5.</strong> Which group is Carla added to?</p>
+    <select id="l5"><option value="">Choose</option><option>SG-Finance-Share-Write</option><option>SG-IT-Admins</option><option>SG-Finance-Share-Read</option></select>
+
+    <p><strong>6.</strong> What problem does Carla report in the afternoon?</p>
+    <select id="l6"><option value="">Choose</option><option>Her laptop is slow</option><option>Access Denied on the Finance folder</option><option>She forgot her password</option></select>
+
+    <p><strong>7.</strong> What does Alex ask Carla to do first?</p>
+    <select id="l7"><option value="">Choose</option><option>Reboot the server</option><option>Reinstall Windows</option><option>Sign out and sign back in</option></select>
+
+    <p><strong>8.</strong> Which command does Alex run?</p>
+    <select id="l8"><option value="">Choose</option><option>whoami /groups</option><option>ipconfig /all</option><option>ping</option></select>
+
+    <p><strong>9.</strong> What does Alex finally find?</p>
+    <select id="l9"><option value="">Choose</option><option>A disabled account</option><option>An explicit Deny entry</option><option>A broken network cable</option></select>
+
+    <p><strong>10.</strong> What does Alex write in the ticket?</p>
+    <select id="l10"><option value="">Choose</option><option>Nothing</option><option>A clear note with the cause and solution</option><option>Only the user's name</option></select>
+
+    <button class="secondary" onclick="checkListening()">Check Listening</button>
+    <div id="lfb" class="feedback"></div>
+  </div>
+</section>
+
+<section class="card speaking-card" id="speaking">
+  <h2>🗣️ 8. Speaking Practice — Technical Interview</h2>
+  <p>Pratique em voz alta. Para cada pergunta, siga a fórmula <strong>Symptom + Cause + Action</strong> (ou <strong>Statement + Reason + Complement</strong>). Grave-se e compare com os modelos.</p>
+
+  <div class="exercise">
+    <h3>Question 1</h3>
+    <p><strong>What is the difference between a local account and a domain account?</strong></p>
+    <div class="example">
+      <div class="en">Model: A local account exists on one computer only. A domain account is stored on the Domain Controller, <strong>so</strong> it works on every domain-joined PC. <strong>As a result</strong>, IT manages access from one place.</div>
+      <div class="example-audio"><button class="audio-btn" data-phrase="A local account exists on one computer only. A domain account is stored on the Domain Controller, so it works on every domain-joined PC. As a result, IT manages access from one place." data-accent="us">🇺🇸 US</button><button class="audio-btn" data-phrase="A local account exists on one computer only. A domain account is stored on the Domain Controller, so it works on every domain-joined PC. As a result, IT manages access from one place." data-accent="uk">🇬🇧 UK</button></div>
+    </div>
+    <textarea placeholder="Write your own answer using Symptom + Cause + Action..."></textarea>
+    <button class="light" onclick="markSectionDone('speaking')">✅ I practiced this</button>
+  </div>
+  <div class="exercise">
+    <h3>Question 2</h3>
+    <p><strong>How do you give a new employee access to a shared folder?</strong></p>
+    <div class="example">
+      <div class="en">Model: I add the user to the correct security group <strong>because</strong> permissions live on groups. <strong>In addition</strong>, I place the account in the right OU.</div>
+      <div class="example-audio"><button class="audio-btn" data-phrase="I add the user to the correct security group because permissions live on groups. In addition, I place the account in the right OU." data-accent="us">🇺🇸 US</button><button class="audio-btn" data-phrase="I add the user to the correct security group because permissions live on groups. In addition, I place the account in the right OU." data-accent="uk">🇬🇧 UK</button></div>
+    </div>
+    <textarea placeholder="Write your own answer using Symptom + Cause + Action..."></textarea>
+    <button class="light" onclick="markSectionDone('speaking')">✅ I practiced this</button>
+  </div>
+  <div class="exercise">
+    <h3>Question 3</h3>
+    <p><strong>What do you do when an employee leaves the company?</strong></p>
+    <div class="example">
+      <div class="en">Model: I disable the account, reset the password and move it to a Disabled Users OU. I don't delete it right away <strong>since</strong> the audit trail may be needed.</div>
+      <div class="example-audio"><button class="audio-btn" data-phrase="I disable the account, reset the password and move it to a Disabled Users OU. I don&#x27;t delete it right away since the audit trail may be needed." data-accent="us">🇺🇸 US</button><button class="audio-btn" data-phrase="I disable the account, reset the password and move it to a Disabled Users OU. I don&#x27;t delete it right away since the audit trail may be needed." data-accent="uk">🇬🇧 UK</button></div>
+    </div>
+    <textarea placeholder="Write your own answer using Symptom + Cause + Action..."></textarea>
+    <button class="light" onclick="markSectionDone('speaking')">✅ I practiced this</button>
+  </div>
+  <div class="exercise">
+    <h3>Question 4</h3>
+    <p><strong>A user gets "Access Denied" on a folder. How do you troubleshoot?</strong></p>
+    <div class="example">
+      <div class="en">Model: <strong>First</strong>, I ask the user to sign out and back in. <strong>Then</strong> I run whoami /groups, check the Share and NTFS permissions, <strong>and</strong> look for an explicit Deny.</div>
+      <div class="example-audio"><button class="audio-btn" data-phrase="First, I ask the user to sign out and back in. Then I run whoami slash groups, check the Share and NTFS permissions, and look for an explicit Deny." data-accent="us">🇺🇸 US</button><button class="audio-btn" data-phrase="First, I ask the user to sign out and back in. Then I run whoami slash groups, check the Share and NTFS permissions, and look for an explicit Deny." data-accent="uk">🇬🇧 UK</button></div>
+    </div>
+    <textarea placeholder="Write your own answer using Symptom + Cause + Action..."></textarea>
+    <button class="light" onclick="markSectionDone('speaking')">✅ I practiced this</button>
+  </div>
+  <div class="tip">
+    <strong>💡 Dica de pronúncia:</strong> Use as gravações US/UK como modelo. Em <em>Active Directory</em> a ênfase vai em <em>AC</em>-tive e em <em>di-REC</em>-tory; em <em>Access Denied</em> a ênfase vai em <em>AC</em>-cess e <em>de-NIED</em>.
+  </div>
+</section>
+
+<section class="card" id="quiz">
+  <h2>🎮 9. Interactive Quiz</h2>
+  <p>10 questões sobre Active Directory, OUs, grupos e troubleshooting. O feedback aparece imediatamente. <em>As questões são embaralhadas a cada tentativa.</em></p>
+
+  <div id="quizContainer"></div>
+
+  <div class="score">
+    <div>YOUR SCORE</div>
+    <strong id="score">0 / 10</strong>
+    <p id="scoreMessage">Complete o quiz para ver seu resultado.</p>
+    <button class="light" onclick="restartQuiz()">🔄 Restart Quiz</button>
+  </div>
+</section>
+
+<section class="card">
+  <h2>🏁 Lesson Challenge</h2>
+  <p>Sem consultar o conteúdo, responda em inglês usando <strong>Symptom + Cause + Action</strong>:</p>
+  <div class="example">
+    <strong>1.</strong> What is Active Directory?<br>
+    <strong>2.</strong> What is the difference between an OU and a security group?<br>
+    <strong>3.</strong> How do you onboard a new employee?<br>
+    <strong>4.</strong> How do you offboard an employee safely?<br>
+    <strong>5.</strong> A user was added to a group but still gets Access Denied. What do you do?
+  </div>
+  <p class="small">Objetivo: produzir 5 respostas completas em 2–3 minutos.</p>
+</section>
+
+<section class="card">
+  <h2>🔑 LinkedIn Keywords — Day 1</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>English</th><th>Português</th></tr></thead>
+    <tbody>
+      <tr><td>Active Directory (AD), Windows Server, Security Groups, NTFS Permissions, User Provisioning</td><td>Active Directory, Administração Windows Server, Gestão de Identidades, Controle de Acesso, Suporte a Usuários</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+</main>
+
+<footer>
+  Suporte de TI • Windows Server • Active Directory • Microsoft 365 • Intune • Cloud • Redes<br>
+  <span class="copyright">© English VClass • Edson D'Aguiar</span>
+  • WhatsApp ➡️ <a href="https://wa.me/5541991725009" target="_blank" rel="noopener">Contato</a>
+</footer>
+
+<script>
+/* ---------- AUDIO ---------- */
+document.addEventListener('click', function(e) {
+  const btn = e.target.closest('.audio-btn, .vocab-audio');
+  if (!btn) return;
+  e.stopPropagation();
+  const phrase = btn.dataset.phrase;
+  const accent = btn.dataset.accent || 'us';
+  if (!phrase) return;
+
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+
+  const utterance = new SpeechSynthesisUtterance(phrase);
+  const langMap = { us: 'en-US', uk: 'en-GB' };
+  utterance.lang = langMap[accent] || 'en-US';
+  utterance.rate = 0.85;
+  utterance.pitch = 1.0;
+
+  const voices = window.speechSynthesis.getVoices();
+  if (voices.length > 0) {
+    const found = voices.find(v => v.lang.startsWith(utterance.lang)) ||
+                  voices.find(v => v.lang.startsWith('en'));
+    if (found) utterance.voice = found;
+  }
+
+  btn.classList.add('playing');
+  utterance.onend = () => btn.classList.remove('playing');
+  utterance.onerror = () => btn.classList.remove('playing');
+  window.speechSynthesis.speak(utterance);
+});
+
+/* ---------- FEEDBACK HELPER ---------- */
+function setFeedback(el, correct, text){
+  el.className='feedback '+(correct?'correct':'wrong');
+  el.textContent=(correct?'🟢 ':'🔴 ')+text;
+}
+
+/* ---------- CONCEPT CARDS ---------- */
+function answerConcept(btn, isCorrect, cardId){
+  const card = document.getElementById(cardId);
+  const options = card.querySelectorAll('.option');
+  const fb = card.querySelector('.feedback');
+  if ([...options].some(o => o.disabled)) return;
+
+  options.forEach(o => {
+    o.disabled = true;
+    if (o === btn) o.classList.add(isCorrect ? 'correct' : 'wrong');
+  });
+  if (!isCorrect) {
+    options.forEach(o => {
+      const handler = o.getAttribute('onclick') || '';
+      if (handler.includes(', true,')) o.classList.add('correct');
+    });
+  }
+  if (isCorrect) {
+    setFeedback(fb, true, 'Correct!');
+  } else {
+    setFeedback(fb, false, 'Not quite — the highlighted option is the correct answer.');
+  }
+}
+
+/* ---------- PROGRESS ---------- */
+const SECTIONS = ['objetivos','concepts','objects','tools','expressions','examples','exercises','listening','speaking','quiz'];
+const sectionState = {};
+SECTIONS.forEach(s => sectionState[s] = false);
+function markSectionDone(id){
+  if (sectionState[id]) return;
+  sectionState[id] = true;
+  const link = document.querySelector('nav a[data-section="'+id+'"]');
+  if (link) link.classList.add('done');
+  updateProgress();
+}
+function updateProgress(){
+  const done = SECTIONS.filter(s => sectionState[s]).length;
+  const pct = Math.round((done / SECTIONS.length) * 100);
+  document.getElementById('globalProgress').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = pct;
+}
+document.querySelectorAll('#exercises .exercise button').forEach(b => b.addEventListener('click', () => markSectionDone('exercises')));
+document.querySelectorAll('#listening button').forEach(b => b.addEventListener('click', () => markSectionDone('listening')));
+document.querySelectorAll('#speaking button').forEach(b => b.addEventListener('click', () => markSectionDone('speaking')));
+const PASSIVE = ['objetivos','concepts','objects','tools','expressions','examples'];
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(en => { if (en.isIntersecting && PASSIVE.includes(en.target.id)) markSectionDone(en.target.id); });
+}, { threshold: 0.2 });
+PASSIVE.forEach(id => { const el = document.getElementById(id); if (el) observer.observe(el); });
+
+/* ---------- EXERCISES ---------- */
+const EX = {"1": ["A security group", "Correct! Permissions live on security groups.", "Try again — permissions live on security groups, not on users or OUs."], "2": ["Ask the user to sign out and back in", "Correct! The token refreshes at sign-in.", "Try again — the login token only refreshes after a new sign-in."], "3": ["whoami /groups", "Correct! \"whoami /groups\" lists the groups in the token.", "Try again — \"whoami /groups\" lists the groups in the token."], "4": ["disable", "Correct! Disable first, delete after the retention period.", "Try again — disable first so the audit trail and mailbox are kept."], "5": ["The most restrictive one", "Correct! The most restrictive permission wins.", "Try again — when both apply, the most restrictive wins."]};
+function checkSel(n){
+  const v = document.getElementById('ex'+n).value;
+  const d = EX[n], ok = v === d[0];
+  setFeedback(document.getElementById('ex'+n+'fb'), ok, ok ? d[1] : d[2]);
+  markSectionDone('exercises');
+}
+function checkEx6(){
+  const v = document.getElementById('ex6').value.trim().toLowerCase().replace(/[.!?]+$/,'').replace(/\s+/g,' ');
+  const ok = v.includes('disable') && v.includes('account') && (v.includes('delete') || v.includes('remove')) && (v.includes('later') || v.includes('after'));
+  setFeedback(document.getElementById('ex6fb'), ok, ok ? 'Correct! e.g. "I disable the account first and delete it later."' : 'Try again — include "disable", "account", "delete" and "later".');
+  markSectionDone('exercises');
+}
+
+/* ---------- LISTENING ---------- */
+function speakListening(){
+  if(!('speechSynthesis' in window)){ alert('Seu navegador não oferece reprodução de voz neste momento.'); return; }
+  const text = document.querySelector('#transcript .en').textContent.replace(/\s+/g,' ').replace('whoami /groups','whoami slash groups').trim();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang='en-US'; u.rate=.88;
+  speechSynthesis.cancel(); speechSynthesis.speak(u);
+  markSectionDone('listening');
+}
+function toggleTranscript(){
+  const t = document.getElementById('transcript');
+  t.style.display = t.style.display === 'block' ? 'none' : 'block';
+  markSectionDone('listening');
+}
+const LANS = ["IT support specialist", "In the Finance OU", "Because it is a temporary password", "On security groups", "SG-Finance-Share-Read", "Access Denied on the Finance folder", "Sign out and sign back in", "whoami /groups", "An explicit Deny entry", "A clear note with the cause and solution"];
+function checkListening(){
+  let score = 0;
+  LANS.forEach((a,i) => { if (document.getElementById('l'+(i+1)).value === a) score++; });
+  const ok = score === 10;
+  setFeedback(document.getElementById('lfb'), ok, ok ? 'Excellent! 10/10 correct.' : 'You got '+score+'/10. Review the transcript and try again.');
+  markSectionDone('listening');
+}
+
+/* ---------- QUIZ (RANDOMIZED) ---------- */
+const baseQuestions = [
+ {q:"What is a domain account?",a:["An account stored centrally on a Domain Controller", "An account that exists on one laptop only", "An account used only on the web", "A guest account without a password"],c:0,e:"A domain account is stored on the Domain Controller and works on every domain-joined PC."},
+ {q:"Where should folder permissions be granted?",a:["On security groups", "On each individual user", "On the OU", "On the Domain Controller"],c:0,e:"Permissions live on security groups."},
+ {q:"What is an OU mainly used for?",a:["Organizing objects and applying policies", "Granting folder permissions", "Storing passwords", "Encrypting disks"],c:0,e:"OUs organize objects and are where GPOs are applied."},
+ {q:"Why disable an account before deleting it?",a:["To keep the audit trail and mailbox", "Because deleting is impossible", "To speed up the network", "To reset the password"],c:0,e:"Deleting destroys the identity (SID), so most companies disable first."},
+ {q:"A user was added to a group while logged in. What is needed for access?",a:["Sign out and sign back in", "Reinstall Windows", "Delete the user", "Change the OU"],c:0,e:"The token refreshes at the next sign-in."},
+ {q:"What does \"whoami /groups\" show?",a:["The groups in the current token", "The IP address", "The DNS server", "The installed updates"],c:0,e:"It lists the groups in the user's current token."},
+ {q:"Share and NTFS permissions both apply. Which result do you get?",a:["The most restrictive one", "The most permissive one", "Always the Share one", "None of them"],c:0,e:"The most restrictive permission wins."},
+ {q:"Which tool is used to manage AD users, groups and OUs?",a:["ADUC (Active Directory Users and Computers)", "Notepad", "Task Manager", "Paint"],c:0,e:"ADUC (dsa.msc) manages AD objects."},
+ {q:"What happens when a user has an Allow and an explicit Deny on a folder?",a:["Deny wins", "Allow wins", "They cancel each other", "The folder is deleted"],c:0,e:"An explicit Deny overrides Allow."},
+ {q:"Which ticket note is best?",a:["Symptom + cause + action + result", "Fixed", "User problem", "Done, please close"],c:0,e:"A clear note includes symptom, cause, action and result."}
+];
+
+let questions = [];
+let quizScore=0;
+let answered=0;
+
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function buildQuestions(){
+  questions = shuffle(baseQuestions).map(q => {
+    const pairs = q.a.map((text, idx) => ({text, correct: idx === q.c}));
+    const shuffledPairs = shuffle(pairs);
+    const newOptions = shuffledPairs.map(p => p.text);
+    const newCorrect = shuffledPairs.findIndex(p => p.correct);
+    return { q: q.q, a: newOptions, c: newCorrect, e: q.e };
+  });
+}
+
+function renderQuiz(){
+  buildQuestions();
+  const c=document.getElementById('quizContainer');
+  c.innerHTML='';
+  questions.forEach((item,i)=>{
+    const box=document.createElement('div');
+    box.className='exercise';
+    box.innerHTML='<h3>Question '+(i+1)+'</h3><p><strong>'+item.q+'</strong></p>';
+    item.a.forEach((ans,j)=>{
+      const b=document.createElement('button');
+      b.className='option';
+      b.textContent=String.fromCharCode(65+j)+') '+ans;
+      b.onclick=()=>answerQuiz(i,j,box);
+      box.appendChild(b);
+    });
+    const f=document.createElement('div');
+    f.className='feedback';
+    f.id='qfb'+i;
+    box.appendChild(f);
+    c.appendChild(box);
+  });
+  updateScore();
+}
+
+function answerQuiz(i,j,box){
+  const buttons=box.querySelectorAll('.option');
+  if([...buttons].some(b=>b.disabled)) return;
+  buttons.forEach(b=>b.disabled=true);
+  const correct=j===questions[i].c;
+  buttons[j].classList.add(correct?'correct':'wrong');
+  if(!correct) buttons[questions[i].c].classList.add('correct');
+  if(correct) quizScore++;
+  answered++;
+  const fb=document.getElementById('qfb'+i);
+  fb.className='feedback '+(correct?'correct':'wrong');
+  fb.textContent=(correct?'🟢 Correct! ':'🔴 Not quite. ')+questions[i].e;
+  updateScore();
+  if(answered===10) markSectionDone('quiz');
+}
+
+function updateScore(){
+  document.getElementById('score').textContent=quizScore+' / 10';
+  const msg=document.getElementById('scoreMessage');
+  if(answered===0) msg.textContent='Complete o quiz para ver seu resultado.';
+  else if(answered<10) msg.textContent='Keep going! '+answered+' of 10 answered.';
+  else if(quizScore===10) msg.textContent='🏆 Excellent! Perfect score!';
+  else if(quizScore>=8) msg.textContent='👏 Great job! Review the questions you missed.';
+  else if(quizScore>=6) msg.textContent='👍 Good start! Review the lesson and try again.';
+  else msg.textContent='📚 Keep practicing. Review the lesson and restart the quiz.';
+}
+
+function restartQuiz(){
+  quizScore=0; answered=0; renderQuiz();
+  document.getElementById('quiz').scrollIntoView({behavior:'smooth'});
+}
+
+renderQuiz();
+updateProgress();
+</script>
+
+</body>
+</html>
